@@ -2,3 +2,8 @@ include header.pug
 h2 Pug
 p #{foo}
 h3 #{bar}
+each product, index in goods
+  p #{product.name}
+  img(
+    src='images/'+product.image
+  )

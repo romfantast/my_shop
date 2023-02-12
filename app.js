@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const app = express();
 
@@ -24,11 +25,17 @@ app.listen(3000, () => {
 app.get("/", (req, res) => {
   connection.query("SELECT * FROM goods", (error, result) => {
     if (error) throw error;
-    console.log(result);
-  });
 
-  res.render("main.pug", {
-    foo: 4,
-    bar: 7,
+    const goods = {};
+    for (let i = 0; i < result.length; i++) {
+      const product = result[i];
+      goods[product.id] = product;
+    }
+
+    res.render("main.pug", {
+      foo: 4,
+      bar: 7,
+      goods,
+    });
   });
 });
