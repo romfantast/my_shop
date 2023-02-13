@@ -1,9 +1,7 @@
-include header.pug
-h2 Pug
-p #{foo}
-h3 #{bar}
+include header
 each product, index in goods
   p #{product.name}
   img(
+    alt=product.name
     src='images/'+product.image
   )
