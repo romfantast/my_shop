@@ -1,6 +1,7 @@
 const { json } = require("express");
 const express = require("express");
 const app = express();
+const { reindex } = require("./helpers/reindex.js");
 
 // public - folder with static files (html, css, js)
 app.use(express.static("public"));
@@ -10,6 +11,9 @@ app.set("view engine", "pug");
 
 // connect to db
 const mysql = require("mysql2");
+
+//
+app.use(express.json());
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -26,23 +30,22 @@ app.get("/", (req, res) => {
   connection.query("SELECT * FROM goods", (error, result) => {
     if (error) throw error;
 
-    const goods = {};
-    for (let i = 0; i < result.length; i++) {
-      const product = result[i];
-      goods[product.id] = product;
-    }
+    // const goods = {};
+    // for (let i = 0; i < result.length; i++) {
+    //   const product = result[i];
+    //   goods[product.id] = product;
+    // }
 
     res.render("main.pug", {
       foo: 4,
       bar: 7,
-      goods,
+      goods: reindex(result),
     });
   });
 });
 
 app.get("/cat", function (req, res) {
-  console.log(req.query.id);
-  let catId = req.query.id;
+  const catId = req.query.id;
 
   let cat = new Promise(function (resolve, reject) {
     connection.query(
@@ -64,7 +67,6 @@ app.get("/cat", function (req, res) {
   });
 
   Promise.all([cat, goods]).then(function (value) {
-    console.log(value[0]);
     res.render("cat", {
       cat: JSON.parse(JSON.stringify(value[0])),
       goods: JSON.parse(JSON.stringify(value[1])),
@@ -73,7 +75,6 @@ app.get("/cat", function (req, res) {
 });
 
 app.get("/goods", function (req, res) {
-  console.log(req.query.id);
   connection.query(
     "SELECT * FROM goods WHERE id=" + req.query.id,
     function (error, result, fields) {
@@ -86,13 +87,23 @@ app.get("/goods", function (req, res) {
 });
 
 app.post("/get-category-list", function (req, res) {
-  // console.log(req.body);
   connection.query(
     "SELECT id, category FROM category",
     function (error, result, fields) {
       if (error) throw error;
-      console.log(result);
       res.json(result);
+    }
+  );
+});
+
+app.post("/get-goods-info", function (req, res) {
+  console.log(req.body.key);
+
+  connection.query(
+    `SELECT id, name, cost FROM goods WHERE id IN (${req.body.key.join(",")})`,
+    function (error, result, fields) {
+      if (error) throw error;
+      res.json(reindex(result));
     }
   );
 });

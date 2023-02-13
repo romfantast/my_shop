@@ -17,7 +17,6 @@ function getGategoryList() {
       return res.text();
     })
     .then((data) => {
-      console.log(data);
       showCategoryList(JSON.parse(data));
     })
 
@@ -25,7 +24,6 @@ function getGategoryList() {
 }
 
 function showCategoryList(data) {
-  console.log(data);
   let out =
     '<ul class="category-list"><li><a class="category-list-link" href="/">Main</a></li>';
 
