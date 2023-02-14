@@ -19,8 +19,6 @@ function addToCart(event) {
   } else {
     cart[goodId] = 1;
   }
-
-  console.log(cart);
   ajaxGetGoodsInfo();
 }
 
@@ -37,7 +35,6 @@ function ajaxGetGoodsInfo() {
       return res.text();
     })
     .then((body) => {
-      console.log(body);
       showCart(JSON.parse(body));
     });
 }

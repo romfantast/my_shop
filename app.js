@@ -1,5 +1,6 @@
 const { json } = require("express");
 const express = require("express");
+const nodemailer = require("nodemailer");
 const app = express();
 const { reindex } = require("./helpers/reindex.js");
 
@@ -92,6 +93,10 @@ app.get("/goods", function (req, res) {
   );
 });
 
+app.get("/order", function (req, res) {
+  res.render("order");
+});
+
 app.post("/get-category-list", function (req, res) {
   connection.query(
     "SELECT id, category FROM category",
@@ -112,3 +117,68 @@ app.post("/get-goods-info", function (req, res) {
     }
   );
 });
+
+app.post("/finish-order", function (req, res) {
+  if (!Object.keys(req.body.key).length) {
+    res.send("0");
+  } else {
+    const key = Object.keys(req.body.key);
+    connection.query(
+      `SELECT id, name, cost FROM goods WHERE id IN (${key.join(",")})`,
+      function (error, result, fields) {
+        if (error) throw error;
+        sendMailFunc(req.body, result);
+        res.send("1");
+      }
+    );
+  }
+});
+
+async function sendMailFunc(body, res) {
+  console.log(body);
+  console.log(res);
+  let mail = "<h2>Order in Lite Shop</h2>";
+  let total = 0;
+
+  for (let i = 0; i < res.length; i++) {
+    mail += `<p>${res[i].name} - ${body.key[res[i].id]} - ${
+      res[i].cost * body.key[res[i].id]
+    } uah</p>`;
+    total += res[i].cost * body.key[res[i].id];
+  }
+  mail += "<hr/>";
+  mail += `Total: ${total} uah`;
+  mail += `<hr> Phone: ${body.phone}`;
+  mail += `<hr> Username: ${body.userName}`;
+  mail += `<hr> Email: ${body.email}`;
+  mail += `<hr> Address: ${body.address}`;
+
+  nodemailerFunc(body, mail);
+}
+
+async function nodemailerFunc(body, result) {
+  let testAccount = await nodemailer.createTestAccount();
+
+  let transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: testAccount.user, // generated ethereal user
+      pass: testAccount.pass, // generated ethereal password
+    },
+  });
+
+  let mailOption = {
+    from: "<romfantast@gmail.com>",
+    to: "romfantast@gmail.com," + body.email,
+    subject: "Lite shop order",
+    text: "Hello World",
+    html: result,
+  };
+
+  let info = await transporter.sendMail(mailOption);
+  console.log("Message send: " + info.messageId);
+  console.log("Preview send: " + nodemailer.getTestMessageUrl(info));
+  return true;
+}
