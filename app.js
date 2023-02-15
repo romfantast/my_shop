@@ -23,6 +23,8 @@ const connection = mysql.createConnection({
   database: "my_shop",
 });
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 app.listen(3000, () => {
   console.log("Server is working on 3000 PORT");
 });
@@ -128,6 +130,7 @@ app.post("/finish-order", function (req, res) {
       function (error, result, fields) {
         if (error) throw error;
         sendMailFunc(req.body, result);
+        saveOrder(req.body, result);
         res.send("1");
       }
     );
@@ -135,8 +138,6 @@ app.post("/finish-order", function (req, res) {
 });
 
 async function sendMailFunc(body, res) {
-  console.log(body);
-  console.log(res);
   let mail = "<h2>Order in Lite Shop</h2>";
   let total = 0;
 
@@ -182,3 +183,50 @@ async function nodemailerFunc(body, result) {
   console.log("Preview send: " + nodemailer.getTestMessageUrl(info));
   return true;
 }
+
+function saveOrder(data, result) {
+  //data- info about user
+  //result - info about product
+
+  let sql;
+  sql =
+    "INSERT INTO user_info (user_name, user_phone, user_email,address) VALUES ('" +
+    data.userName +
+    "', '" +
+    data.phone +
+    "', '" +
+    data.email +
+    "','" +
+    data.address +
+    "')";
+  connection.query(sql, function (error, resultQuery) {
+    if (error) throw error;
+    console.log("1 user info saved");
+    const userId = resultQuery.insertId;
+    let date = new Date() / 1000;
+    for (let i = 0; i < result.length; i++) {
+      sql =
+        "INSERT INTO shop_order(date, user_id, goods_id, goods_cost, goods_amount, total) VALUES (" +
+        date +
+        "," +
+        userId +
+        "," +
+        result[i]["id"] +
+        ", " +
+        result[i]["cost"] +
+        "," +
+        data.key[result[i]["id"]] +
+        ", " +
+        data.key[result[i]["id"]] * result[i]["cost"] +
+        ")";
+      connection.query(sql, function (error, resultQuery) {
+        if (error) throw error;
+        console.log("1 product saved");
+      });
+    }
+  });
+}
+
+app.get("/admin", function (req, res) {
+  res.render("admin", {});
+});
