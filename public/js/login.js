@@ -11,7 +11,16 @@ function sendLogin() {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-  });
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.message) {
+        alert(data.message);
+        return;
+      }
+      if (data.id) window.location.href = "/admin";
+    })
+    .catch((err) => console.log(err.message));
 }
 
 document.querySelector("#form_login").onsubmit = (e) => {

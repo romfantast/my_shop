@@ -205,7 +205,6 @@ function saveOrder(data, result) {
     console.log("1 user info saved");
     const userId = resultQuery.insertId;
     date = new Date() / 1000;
-    console.log(date);
     for (let i = 0; i < result.length; i++) {
       sql =
         "INSERT INTO shop_order(date, user_id, goods_id, goods_cost, goods_amount, total) VALUES (" +
@@ -234,18 +233,22 @@ app.get("/admin", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   connection.query(
     `SELECT * FROM user WHERE login='${req.body.login}' and password='${req.body.password}'`,
     function (error, result) {
       if (error) throw error;
-      //   if (!result.length) {
-      //     res.writeHead(404);
-      //     res.end("user not found");
-      //     return;
-      //   }
-      //   res.cookie("hash", "cookie_hash");
-      //   res.json(result[0]);
+      if (!result.length) {
+        res.json({ message: "user not found" });
+        return;
+      }
+
+      let mysql = `UPDATE user SET hash='qqq' WHERE id='${result[0].id}'`;
+      res.cookie("hash", "cookie_hash");
+      connection.query(mysql, (error, ress) => {
+        if (error) throw error;
+        res.json(result[0]);
+      });
     }
   );
 });
