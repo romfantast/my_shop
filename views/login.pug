@@ -1,0 +1,13 @@
+include header.pug
+
+div(class='wrap' style='height: 30%')
+    header(class='site-header')
+      include site_header_order.pug
+
+form(action="/login" method="POST" id='form_login')
+  p Username:
+    input(type="text" name="username" placeholder="Enter Your Username " value='admin' id='login')
+  p Password:
+    input(type="password" name="password" placeholder="Enter Your Password " value='123' id='password')
+    input(type="submit", value='Sign-in')
+//- script(src='js/login.js')

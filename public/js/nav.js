@@ -1,12 +1,12 @@
-document.querySelector(".close-nav")?.onclick = closeNav;
-document.querySelector(".show-nav")?.onclick = showNav;
+document.querySelector(".close-nav").onclick = closeNav;
+document.querySelector(".show-nav").onclick = showNav;
 
 function showNav() {
-  document.querySelector(".site-nav")?.style.left = "0";
+  document.querySelector(".site-nav").style.left = "0";
 }
 
 function closeNav() {
-  document.querySelector(".site-nav")?.style.left = "-300px";
+  document.querySelector(".site-nav").style.left = "-300px";
 }
 
 function getGategoryList() {
@@ -32,7 +32,7 @@ function showCategoryList(data) {
   }
 
   out += "</ul>";
-  document.querySelector("#category-list")?.innerHTML = out;
+  document.querySelector("#category-list").innerHTML = out;
 }
 
 getGategoryList();
