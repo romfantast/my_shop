@@ -5,57 +5,58 @@ div(class='wrap')
     header(class='site-header')
       include site_header_order.pug
 
-    div(class='container')
-      div(class='row')
-        div(class='col col-md-12')
-          h3(class="cart-header") Cart
-          div(id='cart-nav')
-        div(class='col col-md-12')
-          h3 Create order 
-        div(class='col col-md-6')
-          form#lite-shop-order(action="")
-                  div(class='form-control')
-                    label(for='username') Name
-                    input(
-                        value = 'Roman Shulga'
-                        type='text',
-                        id='username',
-                        placeholder='Enter your name',
-                        )
-                  div(class='form-control')
-                    label(for='phone') Phone
-                    input(
-                        value = '+380937952749' 
-                        type='text',
-                        id='phone',
-                        placeholder='+380505555555',
-                        )
-                  div(class='form-control')
-                    label(for='email') Email
-                    input(
-                        value = 'romfantast@gmail.com' 
-                        type='text',
-                        id='email',
-                        placeholder='mail@example.com',
-                        )
-                  div(class='form-control')
-                    label(for='address') Address
-                    textarea(
-                        value = 'Kyiv, Prospect Peremogy, 54/a'
-                        id='address',
-                        placeholder='where are you',
-                        )
-                  div(class='form-control')
-                    label(for='rule') 
+    section
+      div(class='container')
+        div(class='row')
+          div(class='col col-md-12')
+            h3(class="cart-header") Cart
+            div(id='cart-nav')
+          div(class='col col-md-12')
+            h3 Create order 
+          div(class='col col-md-6')
+            form#lite-shop-order(action="")
+                    div(class='form-control')
+                      label(for='username') Name
                       input(
-                          type='checkbox',
-                          id='rule',
-                          checked
-                          ) 
-                      span  Terms and Conditions
-                  div(class='form-control text-right')
-                    button(class='button-primary', type='submit') Finish order
-    //include nav.pug
+                          value = 'Roman Shulga'
+                          type='text',
+                          id='username',
+                          placeholder='Enter your name',
+                          )
+                    div(class='form-control')
+                      label(for='phone') Phone
+                      input(
+                          value = '+380937952749' 
+                          type='text',
+                          id='phone',
+                          placeholder='+380505555555',
+                          )
+                    div(class='form-control')
+                      label(for='email') Email
+                      input(
+                          value = 'romfantast@gmail.com' 
+                          type='text',
+                          id='email',
+                          placeholder='mail@example.com',
+                          )
+                    div(class='form-control')
+                      label(for='address') Address
+                      textarea(
+                          value = 'Kyiv, Prospect Peremogy, 54/a'
+                          id='address',
+                          placeholder='where are you',
+                          )
+                    div(class='form-control')
+                      label(for='rule') 
+                        input(
+                            type='checkbox',
+                            id='rule',
+                            checked
+                            ) 
+                        span  Terms and Conditions
+                    div(class='form-control text-right')
+                      button(class='button-primary', type='submit') Finish order
+      //include nav.pug
 
   include footer.pug
   script(src='js/order.js')

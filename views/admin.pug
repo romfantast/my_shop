@@ -1,13 +1,20 @@
-h1 
-  a(
-    href='/'
-  ) Admin panel
-ul 
-  li 
+include header.pug
+
+div(class='wrap' style='height: 30%')
+    header(class='site-header')
+      include site_header_order.pug
+
+section
+  h1 
     a(
-      href='/admin-order'
-    ) Order
-  li 
-    a(
-      href='/admin-goods'
-    ) Goods
+      href='/'
+    ) Admin panel
+  ul 
+    li 
+      a(
+        href='/admin-order'
+      ) Order
+    li 
+      a(
+        href='/admin-goods'
+      ) Goods

@@ -1,26 +1,32 @@
-h1 Admin panel
-h2 Order information
-table 
-  tr 
-    th id 
-    th date
-    th userId 
-    th goods_id 
-    th goods_cost 
-    th goods_amount 
-    th total 
-    th user
-    th phone 
-    th address 
-    each val, index in order 
-      tr 
-        td #{val.id}
-        td #{val.human_date}
-        td #{val.user_id}
-        td #{val.goods_id}
-        td #{val.goods_cost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')} uah
-        td #{val.goods_amount}
-        td #{val.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')} uah
-        td #{val.user}
-        td #{val.phone}
-        td #{val.address}
+include header.pug
+
+div(class='wrap' style='height: 30%')
+    header(class='site-header')
+      include site_header_order.pug
+section
+  h1 Admin panel
+  h3 Order information
+  table 
+    tr 
+      th id 
+      th date
+      th user_id
+      th prod_id 
+      th price
+      th amount 
+      th total 
+      th user
+      th phone 
+      th address 
+      each val, index in order 
+        tr 
+          td #{val.id}
+          td #{val.human_date}
+          td #{val.user_id}
+          td #{val.goods_id}
+          td #{val.goods_cost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')} uah
+          td #{val.goods_amount}
+          td #{val.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')} uah
+          td #{val.user}
+          td #{val.phone}
+          td #{val.address}

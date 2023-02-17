@@ -2,7 +2,10 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const app = express();
 const cookie = require("cookie");
+const cookieParser = require("cookie-parser");
 const { reindex } = require("./helpers/reindex.js");
+const { authRedirect } = require("./public/js/admin");
+const { hashGenerator } = require("./helpers/hashGenerator");
 
 // public - folder with static files (html, css, js)
 app.use(express.static("public"));
@@ -16,6 +19,7 @@ const mysql = require("mysql2");
 //
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(cookieParser());
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -229,11 +233,12 @@ function saveOrder(data, result) {
 }
 
 app.get("/admin", function (req, res) {
-  res.render("admin", {});
+  authRedirect(req, res, connection, () => {
+    res.render("admin", {});
+  });
 });
 
 app.post("/login", function (req, res) {
-  // console.log(req.body);
   connection.query(
     `SELECT * FROM user WHERE login='${req.body.login}' and password='${req.body.password}'`,
     function (error, result) {
@@ -243,8 +248,11 @@ app.post("/login", function (req, res) {
         return;
       }
 
-      let mysql = `UPDATE user SET hash='qqq' WHERE id='${result[0].id}'`;
-      res.cookie("hash", "cookie_hash");
+      let hash = hashGenerator(10);
+      let last_login_time = new Date().toISOString();
+      let mysql = `UPDATE user SET hash='${hash}', last_login_time='${last_login_time}' WHERE id='${result[0].id}'`;
+      res.cookie("hash", hash);
+      res.cookie("id", result[0].id);
       connection.query(mysql, (error, ress) => {
         if (error) throw error;
         res.json(result[0]);
@@ -254,8 +262,9 @@ app.post("/login", function (req, res) {
 });
 
 app.get("/admin-order", function (req, res) {
-  connection.query(
-    `SELECT
+  authRedirect(req, res, connection, () => {
+    connection.query(
+      `SELECT
 	shop_order.user_id as id ,
 	shop_order.user_id as user_id,
     shop_order.goods_id as goods_id,
@@ -271,14 +280,15 @@ FROM
 LEFT JOIN
 	user_info
 ON shop_order.user_id = user_info.id ORDER BY id DESC`,
-    function (error, result, fields) {
-      if (error) throw error;
+      function (error, result, fields) {
+        if (error) throw error;
 
-      res.render("admin-order", {
-        order: JSON.parse(JSON.stringify(result)),
-      });
-    }
-  );
+        res.render("admin-order", {
+          order: JSON.parse(JSON.stringify(result)),
+        });
+      }
+    );
+  });
 });
 
 app.get("/login", function (req, res) {
