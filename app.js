@@ -93,9 +93,18 @@ app.get("/goods", function (req, res) {
     "SELECT * FROM goods WHERE id=" + req.query.id,
     function (error, result, fields) {
       if (error) throw error;
-      res.render("goods", {
-        goods: JSON.parse(JSON.stringify(result)),
-      });
+      const goodId = result[0].id;
+
+      connection.query(
+        "SELECT * FROM images WHERE goods_id=" + goodId,
+        (error, goodsImages) => {
+          if (error) throw error;
+          res.render("goods", {
+            goods: JSON.parse(JSON.stringify(result)),
+            goods_images: JSON.parse(JSON.stringify(goodsImages)),
+          });
+        }
+      );
     }
   );
 });

@@ -11,12 +11,21 @@ div(class='wrap')
             h2(class="panel-title") #{goods[0]['name']}
         div(class="col col-md-4")
             img(
+                alt=goods[0]['image']
                 src="images/"+goods[0]['image']
                 class="goods-big-image"
+            )
+            each val, index in goods_images
+              img(
+                alt=val.path
+                src="images/"+val.path
+                class="goods-small-image"
             )
         div(class="col col-md-8")
             p #{goods[0]['description']}
             span(class="success") Цена: #{goods[0]['cost'].toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')} uah
+            br
+            br
             button(
                 class="button-success add-to-cart"
                 data-goods_id=goods[0]['id']

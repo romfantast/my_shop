@@ -113,3 +113,7 @@ ul.category-list a{
 h1 {
   margin: 0;
 }
+.goods-small-image {
+  padding: 10px;
+  width: 100px;
+}
