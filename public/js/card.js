@@ -65,11 +65,19 @@ function showCart(data) {
   document.querySelectorAll(".cart-plus").forEach((element) => {
     element.onclick = cartPlus;
   });
+  if (Object.keys(cart).length === 0) {
+    document.querySelector("#cart-nav").innerHTML =
+      "Here will be your purchase";
+    document.querySelector(".text-right").style.display = "none";
+  } else {
+    document.querySelector(".text-right").style.display = "block";
+  }
 }
 
 function cartPlus(event) {
   const goodId = event.target.dataset.goods_id;
   cart[goodId]++;
+
   ajaxGetGoodsInfo();
 }
 
