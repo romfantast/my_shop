@@ -5,12 +5,13 @@ div(class='wrap')
     header(class='site-header')
       include site_header
 
-    div(class='container')
-      div(class='row')
-        div(class='col col-md-12')
-          h2 #{cat[0]['category']}
-        each val, index in goods
-          include card.pug
-        div #{cat[0]['description']}
-      include nav
+    section 
+      div(class='container')
+        div(class='row')
+          div(class='col col-md-12')
+            h2 #{cat[0]['category']}
+          each val, index in goods
+            include card.pug
+          div(style='margin-top: 20px') #{cat[0]['description']}
+        include nav
     include footer

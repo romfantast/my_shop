@@ -1,7 +1,10 @@
 div(class='col col-md-4')
     div(class='card')
         a(href='goods?id='+val.id)
-            h3(class='card-title text-center') #{val['name']}
+            if val['name'].length > 30
+                h5(class='card-title text-center') #{val['name'].slice(0, 30)}...
+            else
+                h5(class='card-title text-center') #{val['name']}
             img(
                 alt = val.name
                 src='images/'+val['image']

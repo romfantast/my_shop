@@ -51,9 +51,17 @@ app.get("/", (req, res) => {
     });
   });
   Promise.all([cat, catDescription]).then(function (value) {
+    const { id, hash } = req.cookies;
+    const isAuth = () => {
+      if (!id || !hash) {
+        return false;
+      }
+      return true;
+    };
     res.render("index", {
       goods: JSON.parse(JSON.stringify(value[0])),
       cat: JSON.parse(JSON.stringify(value[1])),
+      isAuth: isAuth(),
     });
   });
 });

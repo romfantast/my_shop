@@ -6,7 +6,8 @@ form {
   padding: 0 15px;
 }
 
-table, tbody { 
+table,
+tbody {
   padding: 0 15px;
 }
 th {
@@ -50,7 +51,15 @@ th {
 /* ------------card ------------------- */
 
 .card {
-  border: 1px solid #dedede;
+  /* border: 1px solid #dedede; */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  transition: all 150ms linear;
+}
+.card a img {
+  max-height: 150px;
+}
+.card:hover {
+  transform: scale(1.01);
 }
 
 .card-images {
@@ -73,7 +82,6 @@ th {
   color: white;
   height: 100vh;
   overflow: scroll;
-
 }
 
 .close-button-div {
@@ -88,22 +96,26 @@ ul.category-list {
   list-style-type: disc;
 }
 
-ul.category-list a{
+ul.category-list a {
   color: rgb(80, 69, 69);
 }
 
 .site-nav a {
-  color:rgb(80, 69, 69);;
+  color: rgb(80, 69, 69);
 }
 
-.good-container{
+.good-container {
   height: 100vh;
 }
 .row {
   align-items: center;
 }
 .show-nav {
+  border: none;
   margin: 0;
+}
+.show-nav i {
+  font-size: 25px;
 }
 .btn-wrapper {
   display: flex;
@@ -116,4 +128,38 @@ h1 {
 .goods-small-image {
   padding: 10px;
   width: 100px;
+}
+
+.footer-text,
+.header-text {
+  width: max-content;
+  color: white;
+}
+.footer-text {
+  text-align: center;
+}
+.footer {
+  font-size: 20px;
+  background-color: #454165;;
+}
+.name-wrapper {
+ display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.auth span a {
+  color: #fff;
+}
+.auth span {
+  cursor: pointer;
+}
+.auth span:hover {
+  text-decoration: underline;
+}
+.header-link {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  align-items: center;
+  width: 100%;
 }
